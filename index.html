@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PENTOPAK — Leads Report Q1/Q2 2026</title>
+<title>PENTOPAK — Leads Report 2026</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap');
 
@@ -14,7 +14,6 @@
     --beige: #EAEADC;
     --white: #ffffff;
     --gray: #888;
-    --light-gray: #f4f4f0;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,12 +25,12 @@
     min-height: 100vh;
   }
 
-  /* HEADER */
+  /* ── HEADER ── */
   .header {
     background: var(--black);
     padding: 0;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .header-inner {
@@ -53,15 +52,11 @@
     letter-spacing: -1px;
     color: var(--beige);
     line-height: 1;
-    position: relative;
   }
 
-  .logo-text .p-special {
-    color: var(--red);
-  }
+  .logo-text .p-special { color: var(--red); }
 
   .descriptor {
-    font-family: 'Barlow', sans-serif;
     font-size: 10px;
     font-weight: 400;
     letter-spacing: 3px;
@@ -72,12 +67,20 @@
 
   .header-right {
     background: var(--navy);
-    padding: 28px 40px;
+    padding: 22px 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 4px;
-    min-width: 340px;
+    gap: 6px;
+    min-width: 380px;
+    position: relative;
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   .report-label {
@@ -89,19 +92,126 @@
     text-transform: uppercase;
   }
 
+  /* ── LANGUAGE TOGGLE ── */
+  .lang-toggle {
+    display: flex;
+    gap: 0;
+    border: 1.5px solid rgba(234,234,220,0.25);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .lang-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border: none;
+    background: transparent;
+    color: rgba(234,234,220,0.45);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .lang-btn.active {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .lang-btn:not(.active):hover {
+    background: rgba(234,234,220,0.1);
+    color: var(--beige);
+  }
+
+  /* ── PERIOD DROPDOWN ── */
+  .period-wrapper {
+    position: relative;
+  }
+
+  .period-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
   .report-title {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 800;
     color: var(--beige);
     line-height: 1.1;
     letter-spacing: 0.5px;
   }
 
+  .period-caret {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(234,234,220,0.12);
+    border: 1px solid rgba(234,234,220,0.2);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .period-caret svg {
+    transition: transform 0.2s;
+  }
+
+  .period-wrapper.open .period-caret { background: var(--red); }
+  .period-wrapper.open .period-caret svg { transform: rotate(180deg); }
+
+  .period-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 100;
+    background: var(--black);
+    border: 1.5px solid rgba(234,234,220,0.15);
+    min-width: 240px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+  }
+
+  .period-wrapper.open .period-dropdown { display: block; }
+
+  .period-option {
+    display: block;
+    width: 100%;
+    padding: 13px 18px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(234,234,220,0.65);
+    background: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(234,234,220,0.06);
+    transition: all 0.12s;
+  }
+
+  .period-option:last-child { border-bottom: none; }
+  .period-option:hover { background: var(--navy); color: var(--beige); }
+  .period-option.selected { color: var(--red); background: rgba(234,86,61,0.08); }
+
+  .period-option small {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    opacity: 0.5;
+    margin-top: 2px;
+  }
+
   .report-meta {
     font-size: 12px;
-    color: rgba(234,234,220,0.6);
-    margin-top: 6px;
+    color: rgba(234,234,220,0.5);
     font-weight: 300;
     letter-spacing: 1px;
   }
@@ -111,14 +221,14 @@
     background: linear-gradient(90deg, var(--red) 0%, var(--red) 40%, var(--navy) 40%, var(--navy) 100%);
   }
 
-  /* MAIN CONTENT */
+  /* ── MAIN ── */
   .main {
     padding: 40px;
     max-width: 1400px;
     margin: 0 auto;
   }
 
-  /* KPI CARDS */
+  /* ── KPI CARDS ── */
   .kpi-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -130,42 +240,18 @@
 
   .kpi-card {
     padding: 24px 20px;
-    position: relative;
     border-right: 2px solid var(--black);
     background: var(--white);
     transition: transform 0.15s ease;
   }
-
   .kpi-card:last-child { border-right: none; }
+  .kpi-card:hover { z-index: 2; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
-  .kpi-card:hover {
-    z-index: 2;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-  }
-
-  .kpi-card.total {
-    background: var(--black);
-    color: var(--beige);
-  }
-
-  .kpi-card.communicating {
-    background: var(--navy);
-    color: var(--beige);
-  }
-
-  .kpi-card.evaluating {
-    background: var(--beige);
-  }
-
-  .kpi-card.rejected {
-    background: var(--white);
-  }
-
-  .kpi-card.trials {
-    background: var(--red);
-    color: var(--white);
-  }
+  .kpi-card.total        { background: var(--black); color: var(--beige); }
+  .kpi-card.communicating{ background: var(--navy);  color: var(--beige); }
+  .kpi-card.evaluating   { background: var(--beige); }
+  .kpi-card.rejected     { background: var(--white); }
+  .kpi-card.trials       { background: var(--red);   color: var(--white); }
 
   .kpi-number {
     font-family: 'Barlow Condensed', sans-serif;
@@ -175,11 +261,11 @@
     letter-spacing: 2px;
   }
 
-  .kpi-card.total .kpi-number { color: var(--red); }
+  .kpi-card.total         .kpi-number { color: var(--red); }
   .kpi-card.communicating .kpi-number { color: var(--beige); }
-  .kpi-card.evaluating .kpi-number { color: var(--navy); }
-  .kpi-card.rejected .kpi-number { color: var(--black); }
-  .kpi-card.trials .kpi-number { color: var(--white); }
+  .kpi-card.evaluating    .kpi-number { color: var(--navy); }
+  .kpi-card.rejected      .kpi-number { color: var(--black); }
+  .kpi-card.trials        .kpi-number { color: var(--white); }
 
   .kpi-label {
     font-family: 'Barlow Condensed', sans-serif;
@@ -191,25 +277,7 @@
     opacity: 0.75;
   }
 
-  .kpi-icon {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.3;
-  }
-
-  /* SECTION HEADERS */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-
+  /* ── SECTION TAG ── */
   .section-tag {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 11px;
@@ -221,13 +289,7 @@
     color: var(--beige);
   }
 
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: rgba(0,0,0,0.15);
-  }
-
-  /* CONTENT GRID */
+  /* ── CONTENT GRID ── */
   .content-grid {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -235,7 +297,7 @@
     margin-bottom: 40px;
   }
 
-  /* INSIGHTS PANEL */
+  /* ── INSIGHTS ── */
   .insights-panel {
     background: var(--navy);
     padding: 28px;
@@ -285,7 +347,7 @@
     margin-bottom: 4px;
   }
 
-  /* STATUS CHART MINI */
+  /* ── STATUS CHART ── */
   .status-chart {
     background: var(--white);
     padding: 28px;
@@ -298,7 +360,6 @@
     gap: 12px;
     margin-bottom: 12px;
   }
-
   .status-row:last-child { margin-bottom: 0; }
 
   .status-name {
@@ -315,13 +376,12 @@
     flex: 1;
     height: 22px;
     background: var(--beige);
-    position: relative;
     overflow: hidden;
   }
 
   .status-bar-fill {
     height: 100%;
-    transition: width 0.6s ease;
+    transition: width 0.5s ease;
   }
 
   .status-count {
@@ -332,7 +392,7 @@
     text-align: right;
   }
 
-  /* TABLE SECTION */
+  /* ── TABLE ── */
   .table-section {
     background: var(--white);
     border: 2px solid var(--black);
@@ -362,7 +422,6 @@
     letter-spacing: 1px;
   }
 
-  /* FILTER BAR */
   .filter-bar {
     padding: 12px 24px;
     background: var(--beige);
@@ -395,21 +454,10 @@
     transition: all 0.15s;
   }
 
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--black);
-    color: var(--beige);
-  }
+  .filter-btn:hover, .filter-btn.active { background: var(--black); color: var(--beige); }
+  .filter-btn.active-red { background: var(--red); color: var(--white); border-color: var(--red); }
 
-  .filter-btn.active-red {
-    background: var(--red);
-    color: var(--white);
-    border-color: var(--red);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+  table { width: 100%; border-collapse: collapse; }
 
   thead th {
     background: var(--black);
@@ -428,25 +476,12 @@
   }
 
   thead th:hover { background: var(--navy); }
-
   thead th:last-child { border-right: none; }
-
-  thead th .sort-arrow {
-    display: inline-block;
-    margin-left: 6px;
-    opacity: 0.4;
-    font-size: 10px;
-  }
-
+  thead th .sort-arrow { display: inline-block; margin-left: 6px; opacity: 0.4; font-size: 10px; }
   thead th.sorted .sort-arrow { opacity: 1; color: var(--red); }
 
-  tbody tr {
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-    transition: background 0.12s;
-  }
-
+  tbody tr { border-bottom: 1px solid rgba(0,0,0,0.06); transition: background 0.12s; }
   tbody tr:hover { background: var(--beige); }
-
   tbody tr:last-child { border-bottom: none; }
 
   td {
@@ -455,30 +490,11 @@
     vertical-align: top;
     border-right: 1px solid rgba(0,0,0,0.04);
   }
-
   td:last-child { border-right: none; }
+  td.lead-name { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.3px; }
+  td.country   { font-size: 12px; color: var(--gray); font-weight: 500; }
+  td.notes     { font-size: 12.5px; line-height: 1.55; color: #444; max-width: 420px; }
 
-  td.lead-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-  }
-
-  td.country {
-    font-size: 12px;
-    color: var(--gray);
-    font-weight: 500;
-  }
-
-  td.notes {
-    font-size: 12.5px;
-    line-height: 1.55;
-    color: #444;
-    max-width: 420px;
-  }
-
-  /* STATUS BADGE */
   .badge {
     display: inline-block;
     font-family: 'Barlow Condensed', sans-serif;
@@ -490,13 +506,12 @@
     white-space: nowrap;
   }
 
-  .badge-cold { background: #e8e8e8; color: #555; }
-  .badge-warm { background: var(--navy); color: var(--beige); }
-  .badge-eval { background: var(--black); color: var(--beige); }
-  .badge-trial { background: var(--red); color: var(--white); }
+  .badge-cold     { background: #e8e8e8; color: #555; }
+  .badge-warm     { background: var(--navy); color: var(--beige); }
+  .badge-eval     { background: var(--black); color: var(--beige); }
+  .badge-trial    { background: var(--red); color: var(--white); }
   .badge-rejected { background: #ffe0da; color: #c0392b; }
 
-  /* ROW NUMBER */
   .row-num {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 12px;
@@ -505,7 +520,7 @@
     width: 32px;
   }
 
-  /* FOOTER */
+  /* ── FOOTER ── */
   .footer {
     background: var(--black);
     padding: 20px 40px;
@@ -532,28 +547,54 @@
     text-align: right;
   }
 
-  /* HIDDEN ROW (filter) */
   tr.hidden { display: none; }
 
   @media print {
-    body { background: white; }
-    .filter-bar { display: none; }
+    .filter-bar, .period-caret, .lang-toggle { display: none; }
   }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="header">
   <div class="header-inner">
     <div class="header-left">
       <div class="logo-text"><span class="p-special">B</span>ozhko <span class="p-special">R</span>oman</div>
       <div class="descriptor">Sales Specialist</div>
     </div>
+
     <div class="header-right">
-      <div class="report-label">Leads Report</div>
-      <div class="report-title">Period: 23.02 – 23.04.2026</div>
-      <div class="report-meta">Q1-Q2</div>
+      <div class="header-controls">
+        <div class="report-label" data-i18n="reportLabel">Leads Report</div>
+        <div class="lang-toggle">
+          <button class="lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" onclick="setLang('uk')">UA</button>
+        </div>
+      </div>
+
+      <!-- Period dropdown -->
+      <div class="period-wrapper" id="periodWrapper">
+        <div class="period-trigger" onclick="togglePeriodDropdown()">
+          <div class="report-title" id="reportTitle">Period: 23.02 – 23.04.2026</div>
+          <div class="period-caret">
+            <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+              <path d="M1 1L6 7L11 1" stroke="#EAEADC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="period-dropdown" id="periodDropdown">
+          <button class="period-option selected" data-period="0" onclick="selectPeriod(0, this)">
+            23.02 – 23.04.2026
+            <small data-i18n="q1q2">Q1 – Q2 2026</small>
+          </button>
+          <button class="period-option" data-period="1" onclick="selectPeriod(1, this)">
+            23.04 – 07.05.2026
+            <small data-i18n="q2">Q2 2026</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="report-meta" id="reportMeta">Q1 – Q2 2026</div>
     </div>
   </div>
   <div class="accent-bar"></div>
@@ -564,239 +605,462 @@
   <!-- KPI CARDS -->
   <div class="kpi-grid">
     <div class="kpi-card total">
-      <div class="kpi-number">23</div>
-      <div class="kpi-label">Total Leads Found</div>
+      <div class="kpi-number" id="kpi-total">—</div>
+      <div class="kpi-label" data-i18n="kpiTotal">Total Leads Found</div>
     </div>
     <div class="kpi-card communicating">
-      <div class="kpi-number">15</div>
-      <div class="kpi-label">Communicating</div>
+      <div class="kpi-number" id="kpi-comm">—</div>
+      <div class="kpi-label" data-i18n="kpiComm">Communicating</div>
     </div>
     <div class="kpi-card evaluating">
-      <div class="kpi-number">3</div>
-      <div class="kpi-label">Evaluating Proposal</div>
+      <div class="kpi-number" id="kpi-eval">—</div>
+      <div class="kpi-label" data-i18n="kpiEval">Evaluating Proposal</div>
     </div>
     <div class="kpi-card rejected">
-      <div class="kpi-number">4</div>
-      <div class="kpi-label">Rejected</div>
+      <div class="kpi-number" id="kpi-rej">—</div>
+      <div class="kpi-label" data-i18n="kpiRej">Rejected</div>
     </div>
     <div class="kpi-card trials">
-      <div class="kpi-number">1</div>
-      <div class="kpi-label">Active Trials</div>
+      <div class="kpi-number" id="kpi-trial">—</div>
+      <div class="kpi-label" data-i18n="kpiTrial">Active Trials</div>
     </div>
   </div>
 
-  <!-- CONTENT GRID: INSIGHTS + MINI CHART -->
+  <!-- CONTENT GRID -->
   <div class="content-grid">
 
-    <!-- INSIGHTS -->
+    <!-- INSIGHTS PANEL -->
     <div class="insights-panel">
-      <div class="section-tag">Rejection Insights</div>
-      <div class="insights-title">Why Leads Declined</div>
-      <ul class="insights-list">
-        <li>
-          <strong>Alfa Group (Chile)</strong>
-          Absence of large calibre casings (225, 250) in the Cook-In range — client was interested but the product gap was a dealbreaker.
-        </li>
-        <li>
-          <strong>PRINAL S.A. (Chile)</strong>
-          Current supplier offers significantly lower prices on extrusion — price competitiveness is the main blocker.
-        </li>
-        <li>
-          <strong>Widmer & Pagani AG (Switzerland)</strong>
-          Fully satisfied with their existing supplier — no motivation to switch.
-        </li>
-      </ul>
+      <div class="section-tag" data-i18n="insightsTag">Rejection Insights</div>
+      <div class="insights-title" data-i18n="insightsTitle">Why Leads Declined</div>
+      <ul class="insights-list" id="insightsList"></ul>
     </div>
 
-    <!-- MINI STATUS CHART -->
+    <!-- PIPELINE + GEO -->
     <div class="status-chart">
-      <div class="section-tag" style="margin-bottom:20px; display:inline-block;">Pipeline Breakdown</div>
+      <div class="section-tag" style="margin-bottom:20px; display:inline-block;" data-i18n="pipelineTag">Pipeline Breakdown</div>
       <br><br>
+      <div id="pipelineBars"></div>
 
-      <div class="status-row">
-        <div class="status-name">Cold Lead</div>
-        <div class="status-bar-wrap">
-          <div class="status-bar-fill" style="width:50%; background: #c8c8c8;"></div>
-        </div>
-        <div class="status-count" style="color:#555;">11</div>
-      </div>
-
-      <div class="status-row">
-        <div class="status-name">Warm Lead</div>
-        <div class="status-bar-wrap">
-          <div class="status-bar-fill" style="width:18.2%; background: var(--navy);"></div>
-        </div>
-        <div class="status-count" style="color: var(--navy);">4</div>
-      </div>
-
-      <div class="status-row">
-        <div class="status-name">Evaluating Proposal</div>
-        <div class="status-bar-wrap">
-          <div class="status-bar-fill" style="width:13.6%; background: var(--black);"></div>
-        </div>
-        <div class="status-count">3</div>
-      </div>
-
-      <div class="status-row">
-        <div class="status-name">Rejected</div>
-        <div class="status-bar-wrap">
-          <div class="status-bar-fill" style="width:18.2%; background: #f4a59a;"></div>
-        </div>
-        <div class="status-count" style="color: #c0392b;">4</div>
-      </div>
-
-      <div class="status-row">
-        <div class="status-name">Trial</div>
-        <div class="status-bar-wrap">
-          <div class="status-bar-fill" style="width:4.5%; background: var(--red);"></div>
-        </div>
-        <div class="status-count" style="color: var(--red);">1</div>
-      </div>
-
-      <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.08);">
-        <div class="section-tag" style="margin-bottom:16px; display:inline-block; background: var(--navy);">Geography</div>
-        <div style="font-size:13px; line-height:1.8; color: #555; columns: 2; column-gap: 20px; font-weight: 500;">
-          🌎 Latin America: Bolivia, Brazil, Chile (×2), Dominican Rep. (×2), El Salvador, Guatemala, Honduras, Mexico, Panama, Paraguay, Puerto Rico, Venezuela (×2)<br>
-          🌍 Europe: France, Italy, Spain, Switzerland, UK<br>
-          🌏 Asia / Pacific: South Korea<br>
-          🌍 Africa: RSA (×2)
-        </div>
+      <div style="margin-top:28px; padding-top:20px; border-top:1px solid rgba(0,0,0,0.08);">
+        <div class="section-tag" style="margin-bottom:16px; display:inline-block; background:var(--navy);" data-i18n="geoTag">Geography</div>
+        <div id="geoText" style="font-size:13px; line-height:1.8; color:#555; columns:2; column-gap:20px; font-weight:500;"></div>
       </div>
     </div>
-
   </div>
 
   <!-- TABLE -->
   <div class="table-section">
     <div class="table-header-bar">
-      <h2>All Leads — Full Detail</h2>
-      <span class="sort-hint">Click column header to sort</span>
+      <h2 data-i18n="tableTitle">All Leads — Full Detail</h2>
+      <span class="sort-hint" data-i18n="sortHint">Click column header to sort</span>
     </div>
-
-    <div class="filter-bar">
-      <span class="filter-label">Filter:</span>
-      <button class="filter-btn active" onclick="filterTable('all', this)">All (22)</button>
-      <button class="filter-btn" onclick="filterTable('cold lead', this)">Cold (11)</button>
-      <button class="filter-btn" onclick="filterTable('warm lead', this)">Warm (4)</button>
-      <button class="filter-btn" onclick="filterTable('Оцінка пропозиції', this)">Evaluating (3)</button>
-      <button class="filter-btn" onclick="filterTable('Відмова', this)">Rejected (4)</button>
-      <button class="filter-btn" onclick="filterTable('Випробування', this)">Trial (1)</button>
-    </div>
-
+    <div class="filter-bar" id="filterBar"></div>
     <table id="leadsTable">
       <thead>
         <tr>
           <th class="row-num" onclick="sortTable(0)"># <span class="sort-arrow">↕</span></th>
-          <th onclick="sortTable(1)">Company <span class="sort-arrow">↕</span></th>
-          <th onclick="sortTable(2)">Country <span class="sort-arrow">↕</span></th>
-          <th onclick="sortTable(3)">Status <span class="sort-arrow">↕</span></th>
-          <th>Progress & Notes</th>
+          <th onclick="sortTable(1)"><span data-i18n="colCompany">Company</span> <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable(2)"><span data-i18n="colCountry">Country</span> <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable(3)"><span data-i18n="colStatus">Status</span> <span class="sort-arrow">↕</span></th>
+          <th><span data-i18n="colNotes">Progress & Notes</span></th>
         </tr>
       </thead>
-      <tbody id="tableBody">
-      </tbody>
+      <tbody id="tableBody"></tbody>
     </table>
   </div>
 
 </main>
 
 <footer class="footer">
-  <div class="footer-logo"><span>P</span>ENTOPAK &nbsp;/&nbsp; Leads Report 2026</div>
-  <div class="footer-meta">Confidential — Internal Use Only<br>April 2026</div>
+  <div class="footer-logo"><span>P</span>ENTOPAK &nbsp;/&nbsp; <span data-i18n="footerLabel">Leads Report 2026</span></div>
+  <div class="footer-meta"><span data-i18n="footerConf">Confidential — Internal Use Only</span><br><span id="footerDate">May 2026</span></div>
 </footer>
 
 <script>
-const leads = [
-  { name: "FABPSA", country: "Mexico", status: "cold lead", notes: "Sent emails. No reply.\nWill follow up with a direct phone call." },
-  { name: "Tripafacil", country: "Brazil", status: "cold lead", notes: "Sent emails. No reply.\nWill follow up with a direct phone call." },
-  { name: "Comercializadora Rierba SRL", country: "Dominican Republic", status: "cold lead", notes: "Sent emails. No reply. Made direct contact.\nPhone call scheduled — lead was absent from office on first attempt." },
-  { name: "Chunyang Global Co. Ltd.", country: "South Korea", status: "cold lead", notes: "Sent emails. No reply.\nPhone call scheduled — lead was absent from office on first attempt." },
-  { name: "Espalsa", country: "Dominican Republic", status: "cold lead", notes: "Sent emails. No reply.\nPhone call scheduled — lead was absent from office on first attempt." },
-  { name: "Freddy Hirsch", country: "South Africa", status: "cold lead", notes: "Sent emails. No reply.\nCall scheduled with the procurement department — lead is on leave." },
-  { name: "Grupo Dimex", country: "Guatemala", status: "cold lead", notes: "Sent emails. No reply.\nWill follow up with a direct phone call." },
-  { name: "Trident Caribbean", country: "Puerto Rico", status: "cold lead", notes: "Former client (Beautty Caribbean). Left due to rising logistics costs. Expressed interest but raised concerns: war, production cost and lead time.\nNo longer responding to email, WhatsApp or calls." },
-  { name: "BIOR PMA INC.", country: "Panama", status: "cold lead", notes: "Sent emails and WhatsApp messages. No reply.\nWill follow up with a direct phone call." },
-  { name: "Techpartner Srl.", country: "Italy", status: "cold lead", notes: "Sent emails. No reply.\nPhone call scheduled — lead was absent from office on first attempt." },
-  { name: "Agro-Industrie Technologie", country: "France", status: "cold lead", notes: "Lead expressed interest but stopped responding to emails and calls.\nFollow-up call planned." },
-  { name: "LOOM Suministros Veterinarios C.A", country: "Venezuela", status: "warm lead", notes: "Lead proactively reached out about Universal and Pentaterm lines.\nMaterials sent. Not responding lately — will follow up by phone." },
-  { name: "Grupo ALZA", country: "Honduras", status: "warm lead", notes: "Lead engaged and brought in their purchasing manager.\nRequired information sent. Follow-up reminder email planned." },
-  { name: "Scobie & Junor", country: "United Kingdom", status: "warm lead", notes: "Lead is interested. Enquired about non-shrinkable casing and pre-stuck (biaxially oriented). Exploring Kranz, Overstuff, Shape options — need info on end products. Reminder email planned." },
-  { name: "FAI BERTI SLU", country: "Spain", status: "warm lead", notes: "Sent emails with no reply initially. Called directly and found a new contact person who is interested in the product. Required information sent." },
-  { name: "Aditec-Aditivos", country: "Bolivia", status: "Випробування", notes: "Agreed with the lead on sending samples. Preparing the shipment." },
-  { name: "Alfa Group", country: "Chile", status: "Відмова", notes: "Lead was interested but stopped by the absence of large calibres (225, 250) for Cook-In in the product range." },
-  { name: "Crown National", country: "South Africa", status: "Відмова", notes: "Lead stated they are not currently interested in our product." },
-  { name: "PRINAL S.A.", country: "Chile", status: "Відмова", notes: "Lead stated that their current supplier offers significantly lower prices on extrusion." },
-  { name: "Widmer & Pagani AG", country: "Switzerland", status: "Відмова", notes: "Lead stated they are fully satisfied with their current supplier." },
-  { name: "Cotrani", country: "El Salvador", status: "Оцінка пропозиції", notes: "Sent lead the production and delivery cost information.\nWill follow up to ask about interest in receiving samples." },
-  { name: "San Expedito S.R.L.", country: "Paraguay", status: "Оцінка пропозиції", notes: "Sent production and delivery cost information this week.\nLead will compare our pricing with Brazilian suppliers and respond." },
-  { name: "Euro Qualitet", country: "Venezuela", status: "Оцінка пропозиції", notes: "Sent production and delivery cost information.\nSent a follow-up reminder this week asking for a decision and about sample interest." },
+/* ═══════════════════════════════════════════
+   DATA — two periods
+═══════════════════════════════════════════ */
+
+const PERIODS = [
+  {
+    label_en: "23.02 – 23.04.2026",
+    label_uk: "23.02 – 23.04.2026",
+    meta_en:  "Q1 – Q2 2026",
+    meta_uk:  "Q1 – Q2 2026",
+    footer_en: "April 2026",
+    footer_uk: "Квітень 2026",
+    leads: [
+      { name: "FABPSA",                          country_en: "Mexico",              country_uk: "Мексика",                 status: "cold", notes_en: "Sent emails. No reply.\nWill follow up with a direct phone call.", notes_uk: "Надсилав листи. Без відповіді.\nПродовжу, зателефонувавши напряму." },
+      { name: "Tripafacil",                      country_en: "Brazil",              country_uk: "Бразилія",                status: "cold", notes_en: "Sent emails. No reply.\nWill follow up with a direct phone call.", notes_uk: "Надсилав листи. Без відповіді.\nПродовжу, зателефонувавши напряму." },
+      { name: "Comercializadora Rierba SRL",     country_en: "Dominican Republic",  country_uk: "Домінік. Республіка",     status: "cold", notes_en: "Sent emails. No reply. Made direct contact.\nPhone call scheduled — lead was absent from office on first attempt.", notes_uk: "Надсилав листи. Без відповіді. Зв'язався напряму.\nМаю запланований телефонний дзвінок, оскільки лід був відсутній у офісі." },
+      { name: "Chunyang Global Co. Ltd.",        country_en: "South Korea",         country_uk: "Південна Корея",          status: "cold", notes_en: "Sent emails. No reply.\nPhone call scheduled — lead was absent from office on first attempt.", notes_uk: "Надсилав листи. Без відповіді.\nМаю запланований телефонний дзвінок, оскільки лід був відсутній у офісі." },
+      { name: "Espalsa",                         country_en: "Dominican Republic",  country_uk: "Домінік. Республіка",     status: "cold", notes_en: "Sent emails. No reply.\nPhone call scheduled — lead was absent from office on first attempt.", notes_uk: "Надсилав листи. Без відповіді.\nМаю запланований телефонний дзвінок, оскільки лід був відсутній у офісі." },
+      { name: "Freddy Hirsch",                   country_en: "South Africa",        country_uk: "ПАР",                     status: "cold", notes_en: "Sent emails. No reply.\nCall scheduled with procurement dept — lead is on leave.", notes_uk: "Надсилав листи. Без відповіді.\nМаю запланований дзвінок з відділом закупівель, оскільки лід у відпустці." },
+      { name: "Grupo Dimex",                     country_en: "Guatemala",           country_uk: "Гватемала",               status: "cold", notes_en: "Sent emails. No reply.\nWill follow up with a direct phone call.", notes_uk: "Надсилав листи. Без відповіді.\nПродовжу, зателефонувавши напряму." },
+      { name: "Trident Caribbean",               country_en: "Puerto Rico",         country_uk: "Пуерто-Рико",             status: "cold", notes_en: "Former client (Beautty Caribbean). Left due to rising logistics costs. Expressed interest but raised concerns: war, cost and lead time.\nNo longer responding to email, WhatsApp or calls.", notes_uk: "Лід співпрацював з нами раніше (Beautty Caribbean).\nПішов через вартість логістики. Зацікавився, але назвав \"страхи\" (війна, вартість, тривалість виробництва).\nНа подальші спроби зв'язатися не реагує." },
+      { name: "BIOR PMA INC.",                   country_en: "Panama",              country_uk: "Панама",                  status: "cold", notes_en: "Sent emails and WhatsApp messages. No reply.\nWill follow up with a direct phone call.", notes_uk: "Надсилав листи та контактував через WhatsApp. Без відповіді.\nПродовжу, зателефонувавши напряму." },
+      { name: "Techpartner Srl.",                country_en: "Italy",               country_uk: "Італія",                  status: "cold", notes_en: "Sent emails. No reply.\nPhone call scheduled — lead was absent from office on first attempt.", notes_uk: "Надсилав листи. Без відповіді.\nМаю запланований телефонний дзвінок, оскільки лід був відсутній у офісі." },
+      { name: "Agro-Industrie Technologie",      country_en: "France",              country_uk: "Франція",                 status: "cold", notes_en: "Lead expressed interest but stopped responding to emails and calls.\nFollow-up call planned.", notes_uk: "Лід висловив зацікавленість, але припинив відповідати на листи та дзвінки.\nМаю запланований дзвінок пізніше." },
+      { name: "LOOM Suministros Veterinarios C.A", country_en: "Venezuela",         country_uk: "Венесуела",               status: "warm", notes_en: "Lead proactively reached out about Universal and Pentaterm lines.\nMaterials sent. Not responding lately — will follow up by phone.", notes_uk: "Лід сам звернувся по Universal та Pentaterm.\nНадіслав матеріали. Останнім часом не відповідає.\nПродовжу, зателефонувавши напряму." },
+      { name: "Grupo ALZA",                      country_en: "Honduras",            country_uk: "Гондурас",                status: "warm", notes_en: "Lead engaged and brought in their purchasing manager.\nRequired info sent. Follow-up reminder email planned.", notes_uk: "Лід зацікавився та підключив менеджера з закупівель.\nНадіслав необхідну інформацію. Запланував лист-нагадування." },
+      { name: "Scobie & Junor",                  country_en: "United Kingdom",      country_uk: "Великобританія",          status: "warm", notes_en: "Lead is interested. Enquired about non-shrinkable casing and pre-stuck (biaxially oriented). Exploring Kranz, Overstuff, Shape options. Reminder email planned.", notes_uk: "Лід зацікавився. Запитував про non-shrinkable casing та pre-stuck (biaxially oriented). Спробував запропонувати Kranz, Overstuff, Shape. Запланований лист-нагадування." },
+      { name: "FAI BERTI SLU",                   country_en: "Spain",               country_uk: "Іспанія",                 status: "warm", notes_en: "No initial reply by email. Called directly and found a new contact person who is interested. Required info sent.", notes_uk: "Надсилав листи без відповіді. Зателефонувавши напряму, знайшов нового контакта, який зацікавився.\nНадіслав необхідну інформацію." },
+      { name: "Aditec-Aditivos",                 country_en: "Bolivia",             country_uk: "Болівія",                 status: "trial", notes_en: "Agreed on sending samples. Preparing the shipment.", notes_uk: "Домовився з лідом про відправлення зразків. Готую посилку." },
+      { name: "Alfa Group",                      country_en: "Chile",               country_uk: "Чилі",                    status: "rejected", notes_en: "Lead was interested but stopped by the absence of large calibres (225, 250) for Cook-In in the product range.", notes_uk: "Лід зацікавився, але його зупинила відсутність в асортименті великих калібрів (225, 250) для Cook-In." },
+      { name: "Crown National",                  country_en: "South Africa",        country_uk: "ПАР",                     status: "rejected", notes_en: "Lead stated they are not currently interested in our product.", notes_uk: "Лід повідомив, що їх поки не цікавить наша продукція." },
+      { name: "PRINAL S.A.",                     country_en: "Chile",               country_uk: "Чилі",                    status: "rejected", notes_en: "Lead stated that their current supplier offers significantly lower prices on extrusion.", notes_uk: "Лід повідомив, що їх поточний постачальник дає суттєво меншу ціну на екструзію." },
+      { name: "Widmer & Pagani AG",              country_en: "Switzerland",         country_uk: "Швейцарія",               status: "rejected", notes_en: "Lead stated they are fully satisfied with their current supplier.", notes_uk: "Лід повідомив, що їх все влаштовує у співпраці з поточним постачальником." },
+      { name: "Cotrani",                         country_en: "El Salvador",         country_uk: "Сальвадор",               status: "eval", notes_en: "Sent lead the production and delivery cost info.\nWill follow up to ask about interest in receiving samples.", notes_uk: "Надіслав ліду інформацію про вартість виробництва та доставки.\nНапишу пізніше, аби уточнити про бажання отримати зразки." },
+      { name: "San Expedito S.R.L.",             country_en: "Paraguay",            country_uk: "Парагвай",                status: "eval", notes_en: "Sent production and delivery cost info this week.\nLead will compare our pricing with Brazilian suppliers and respond.", notes_uk: "Надіслав ліду інформацію про вартість виробництва та доставки.\nЛід повідомив, що порівняє наші ціни з бразильськими та відпише." },
+      { name: "Euro Qualitet",                   country_en: "Venezuela",           country_uk: "Венесуела",               status: "eval", notes_en: "Sent production and delivery cost info.\nSent a follow-up reminder asking for a decision and about sample interest.", notes_uk: "Надіслав ліду інформацію про вартість виробництва та доставки.\nНадіслав нагадування щодо очікування на рішення та запитав про бажання отримати зразки." },
+    ],
+    insights_en: [
+      { name: "Alfa Group (Chile)",         text: "Absence of large calibre casings (225, 250) in the Cook-In range — client was interested but the product gap was a dealbreaker." },
+      { name: "Crown National (RSA)",       text: "Not interested in the product at this time — no specific objection noted." },
+      { name: "PRINAL S.A. (Chile)",        text: "Current supplier offers significantly lower prices on extrusion — price competitiveness is the main blocker." },
+      { name: "Widmer & Pagani AG (CH)",    text: "Fully satisfied with their existing supplier — no motivation to switch." },
+    ],
+    insights_uk: [
+      { name: "Alfa Group (Чилі)",          text: "Відсутність у асортименті великих калібрів (225, 250) для Cook-In — лід зацікавився, але відсутність продукту стала вирішальною." },
+      { name: "Crown National (ПАР)",       text: "Наразі не зацікавлені у нашій продукції — конкретних заперечень не зазначено." },
+      { name: "PRINAL S.A. (Чилі)",         text: "Поточний постачальник пропонує суттєво нижчу ціну на екструзію — цінова конкурентність є основним блокером." },
+      { name: "Widmer & Pagani AG (Швейц.)",text: "Повністю задоволені поточним постачальником — немає мотивації до зміни." },
+    ],
+    geo_en: "🌎 Latin America: Bolivia, Brazil, Chile (×2), Dominican Rep. (×2), El Salvador, Guatemala, Honduras, Mexico, Panama, Paraguay, Puerto Rico, Venezuela (×2)<br>🌍 Europe: France, Italy, Spain, Switzerland, UK<br>🌏 Asia / Pacific: South Korea<br>🌍 Africa: RSA (×2)",
+    geo_uk: "🌎 Латинська Америка: Болівія, Бразилія, Чилі (×2), Домінік. Респ. (×2), Сальвадор, Гватемала, Гондурас, Мексика, Панама, Парагвай, Пуерто-Рико, Венесуела (×2)<br>🌍 Європа: Франція, Італія, Іспанія, Швейцарія, Великобританія<br>🌏 Азія / Тихоокеан: Південна Корея<br>🌍 Африка: ПАР (×2)",
+  },
+
+  {
+    label_en: "23.04 – 07.05.2026",
+    label_uk: "23.04 – 07.05.2026",
+    meta_en:  "Q2 2026",
+    meta_uk:  "Q2 2026",
+    footer_en: "May 2026",
+    footer_uk: "Травень 2026",
+    leads: [
+      { name: "FABPSA",                          country_en: "Mexico",              country_uk: "Мексика",                 status: "cold",     notes_en: "Sent emails. No reply.\nWill follow up with a direct phone call.", notes_uk: "Надсилав листи. Без відповіді.\nПродовжу, зателефонувавши напряму." },
+      { name: "Tripafacil",                      country_en: "Brazil",              country_uk: "Бразилія",                status: "rejected", notes_en: "Lead stated they have nothing relevant from our catalogue in their current requests.\nAsked what products they currently need.", notes_uk: "Лід повідомив, що немає в своєму списку запитів нічого релевантного з нашого каталогу.\nЗапитав, які запити вона має на даний момент." },
+      { name: "Comercializadora Rierba SRL",     country_en: "Dominican Republic",  country_uk: "Домінік. Республіка",     status: "cold",     notes_en: "Sent emails. No reply. Made direct contact.\nPhone call scheduled — lead was absent from office on first attempt.", notes_uk: "Надсилав листи. Без відповіді. Зв'язався напряму.\nМаю запланований телефонний дзвінок, оскільки лід був відсутній у офісі." },
+      { name: "Chunyang Global Co. Ltd.",        country_en: "South Korea",         country_uk: "Південна Корея",          status: "cold",     notes_en: "Called again — receptionist answered. Lead is likely dodging calls and not interested. Receptionist said she would pass on the message.", notes_uk: "Надсилав листи. Зателефонував, знову відповіла рецепціоністка.\nЛід, мабуть, ухиляється від дзвінків, тобто не зацікавлений. Рецепціоністка сказала, що передасть." },
+      { name: "Espalsa",                         country_en: "Dominican Republic",  country_uk: "Домінік. Республіка",     status: "rejected", notes_en: "Lead shared insight: the Dominican market is currently saturated with Chinese products, and the economic climate is not ideal for introducing a new brand.", notes_uk: "Лід поділився: домініканський ринок наразі перенасичений китайською продукцією, а поточний економічний клімат не є ідеальним для впровадження нового бренду." },
+      { name: "Freddy Hirsch",                   country_en: "South Africa",        country_uk: "ПАР",                     status: "cold",     notes_en: "Sent emails. No reply.\nCall scheduled with procurement dept — lead is on leave.", notes_uk: "Надсилав листи. Без відповіді.\nМаю запланований дзвінок з відділом закупівель, оскільки лід у відпустці." },
+      { name: "Grupo Dimex",                     country_en: "Guatemala",           country_uk: "Гватемала",               status: "cold",     notes_en: "Sent emails. No reply.\nWill follow up with a direct phone call.", notes_uk: "Надсилав листи. Без відповіді.\nПродовжу, зателефонувавши напряму." },
+      { name: "Trident Caribbean",               country_en: "Puerto Rico",         country_uk: "Пуерто-Рико",             status: "cold",     notes_en: "Former client (Beautty Caribbean). Left due to rising logistics costs. Expressed interest but raised concerns: war, cost and lead time.\nNo longer responding to email, WhatsApp or calls.", notes_uk: "Лід співпрацював з нами раніше (Beautty Caribbean).\nПішов через вартість логістики. Зацікавився, але назвав \"страхи\".\nНа подальші спроби зв'язатися не реагує." },
+      { name: "BIOR PMA INC.",                   country_en: "Panama",              country_uk: "Панама",                  status: "cold",     notes_en: "Sent emails and WhatsApp messages. No reply.\nWill follow up with a direct phone call.", notes_uk: "Надсилав листи та контактував через WhatsApp. Без відповіді.\nПродовжу, зателефонувавши напряму." },
+      { name: "Techpartner Srl.",                country_en: "Italy",               country_uk: "Італія",                  status: "cold",     notes_en: "Sent emails. No reply.\nPhone call scheduled — lead was absent from office on first attempt.", notes_uk: "Надсилав листи. Без відповіді.\nМаю запланований телефонний дзвінок, оскільки лід був відсутній у офісі." },
+      { name: "Agro-Industrie Technologie",      country_en: "France",              country_uk: "Франція",                 status: "cold",     notes_en: "Lead expressed interest but stopped responding to emails and calls.\nFollow-up call planned.", notes_uk: "Лід висловив зацікавленість, але припинив відповідати на листи та дзвінки.\nМаю запланований дзвінок пізніше." },
+      { name: "LOOM Suministros Veterinarios C.A", country_en: "Venezuela",         country_uk: "Венесуела",               status: "warm",     notes_en: "Called the lead but no answer. Sent a follow-up email.\nWill call again today.", notes_uk: "Зателефонував ліду, але він не відповідає. Написав лист-нагадування.\nЗателефоную сьогодні ще раз." },
+      { name: "Grupo ALZA",                      country_en: "Honduras",            country_uk: "Гондурас",                status: "cold",     notes_en: "Sent a follow-up reminder.\nWill call today.", notes_uk: "Відправив лист-нагадування.\nЗателефоную сьогодні." },
+      { name: "Scobie & Junor",                  country_en: "United Kingdom",      country_uk: "Великобританія",          status: "warm",     notes_en: "Held an online meeting — lead got answers to all their questions.\nAwaiting data to prepare a commercial proposal. Reminder sent.", notes_uk: "Провів онлайн зустріч, де лід отримав відповіді на всі питання.\nОчікую дані для формування комерційної пропозиції. Надіслав нагадування." },
+      { name: "FAI BERTI SLU",                   country_en: "Spain",               country_uk: "Іспанія",                 status: "warm",     notes_en: "Called the lead. Boss returning from Cuba after May 20th with news on what's needed there regarding casings. Lead's message: \"The cheaper, the better\".", notes_uk: "Зателефонував ліду. Керівник повернеться з Куби після 20 травня з інформацією про потреби. Лід повторював: \"Чим дешевше, тим краще\"." },
+      { name: "Aditec-Aditivos",                 country_en: "Bolivia",             country_uk: "Болівія",                 status: "trial",    notes_en: "Sent the package to the lead.", notes_uk: "Відправив посилку ліду." },
+      { name: "Cotrani",                         country_en: "El Salvador",         country_uk: "Сальвадор",               status: "trial",    notes_en: "Lead declined partial samples and decided to wait for the full set.", notes_uk: "Лід відмовився від часткових зразків та вирішив чекати повного комплекту." },
+      { name: "San Expedito S.R.L.",             country_en: "Paraguay",            country_uk: "Парагвай",                status: "eval",     notes_en: "Sent production and delivery cost info this week.\nLead will compare our pricing with Brazilian suppliers and respond.", notes_uk: "Надіслав ліду інформацію про вартість виробництва та доставки.\nЛід повідомив, що порівняє наші ціни з бразильськими та відпише." },
+      { name: "Euro Qualitet",                   country_en: "Venezuela",           country_uk: "Венесуела",               status: "eval",     notes_en: "Sent production and delivery cost info.\nSent a reminder this week asking for a decision and about sample interest.", notes_uk: "Надіслав ліду інформацію про вартість виробництва та доставки.\nНадіслав нагадування щодо очікування на рішення та запитав про бажання отримати зразки." },
+      { name: "Unipac Packaging Products Ltd.",  country_en: "Canada",              country_uk: "Канада",                  status: "cold",     notes_en: "Sent first email — catalogue and cooperation proposal.", notes_uk: "Надіслав перший лист — каталог та пропозицію про співпрацю." },
+      { name: "Innofood (Innomix)",              country_en: "Turkey",              country_uk: "Туреччина",               status: "eval",     notes_en: "Sent lead production and delivery cost info.\nAlso sent a reminder asking for a decision and about sample interest.", notes_uk: "Надіслав ліду інформацію про вартість виробництва та доставки.\nТакож надіслав нагадування щодо очікування на рішення та запитав про бажання отримати зразки." },
+      { name: "K A Lundgren",                    country_en: "Sweden",              country_uk: "Швеція",                  status: "cold",     notes_en: "Sent first email — catalogue and cooperation proposal, referencing previous contact with Halyna.", notes_uk: "Надіслав перший лист — каталог та пропозицію про співпрацю з нагадуванням про попередній контакт з Галиною." },
+    ],
+    insights_en: [
+      { name: "Tripafacil (Brazil)",          text: "No relevant products in our catalogue matching their current requests." },
+      { name: "Espalsa (Dominican Republic)", text: "Market insight: Dominican Republic is saturated with Chinese products; economic climate unfavourable for introducing a new brand." },
+    ],
+    insights_uk: [
+      { name: "Tripafacil (Бразилія)",              text: "Немає в списку запитів нічого релевантного з нашого каталогу." },
+      { name: "Espalsa (Домінік. Республіка)",      text: "Інсайт ринку: домініканський ринок перенасичений китайською продукцією; економічний клімат не є ідеальним для нового бренду." },
+    ],
+    geo_en: "🌎 Latin America: Bolivia, Chile, Dominican Rep. (×2), El Salvador, Guatemala, Honduras, Mexico, Panama, Paraguay, Puerto Rico, Venezuela (×2)<br>🌍 Europe: France, Italy, Spain, Sweden, UK<br>🌏 Asia / Pacific: South Korea, Turkey<br>🌍 Africa: RSA<br>🌎 North America: Canada",
+    geo_uk: "🌎 Латинська Америка: Болівія, Чилі, Домінік. Респ. (×2), Сальвадор, Гватемала, Гондурас, Мексика, Панама, Парагвай, Пуерто-Рико, Венесуела (×2)<br>🌍 Європа: Франція, Італія, Іспанія, Швеція, Великобританія<br>🌏 Азія / Тихоокеан: Південна Корея, Туреччина<br>🌍 Африка: ПАР<br>🌎 Пн. Америка: Канада",
+  }
 ];
 
-const statusMap = {
-  "cold lead": { label: "Cold Lead", cls: "badge-cold" },
-  "warm lead": { label: "Warm Lead", cls: "badge-warm" },
-  "Оцінка пропозиції": { label: "Evaluating Proposal", cls: "badge-eval" },
-  "Випробування": { label: "Trial", cls: "badge-trial" },
-  "Відмова": { label: "Rejected", cls: "badge-rejected" },
+/* ═══════════════════════════════════════════
+   I18N STRINGS
+═══════════════════════════════════════════ */
+const i18n = {
+  en: {
+    reportLabel:   "Leads Report",
+    q1q2:          "Q1 – Q2 2026",
+    q2:            "Q2 2026",
+    kpiTotal:      "Total Leads Found",
+    kpiComm:       "Communicating",
+    kpiEval:       "Evaluating Proposal",
+    kpiRej:        "Rejected",
+    kpiTrial:      "Active Trials",
+    insightsTag:   "Rejection Insights",
+    insightsTitle: "Why Leads Declined",
+    pipelineTag:   "Pipeline Breakdown",
+    geoTag:        "Geography",
+    tableTitle:    "All Leads — Full Detail",
+    sortHint:      "Click column header to sort",
+    colCompany:    "Company",
+    colCountry:    "Country",
+    colStatus:     "Status",
+    colNotes:      "Progress & Notes",
+    filterAll:     "All",
+    filterCold:    "Cold",
+    filterWarm:    "Warm",
+    filterEval:    "Evaluating",
+    filterRej:     "Rejected",
+    filterTrial:   "Trial",
+    footerLabel:   "Leads Report 2026",
+    footerConf:    "Confidential — Internal Use Only",
+    statusCold:    "Cold Lead",
+    statusWarm:    "Warm Lead",
+    statusEval:    "Evaluating Proposal",
+    statusTrial:   "Trial",
+    statusRej:     "Rejected",
+    pipelineCold:  "Cold Lead",
+    pipelineWarm:  "Warm Lead",
+    pipelineEval:  "Evaluating Proposal",
+    pipelineRej:   "Rejected",
+    pipelineTrial: "Trial",
+  },
+  uk: {
+    reportLabel:   "Звіт по лідах",
+    q1q2:          "Q1 – Q2 2026",
+    q2:            "Q2 2026",
+    kpiTotal:      "Знайдено лідів",
+    kpiComm:       "В комунікації",
+    kpiEval:       "Оцінка пропозиції",
+    kpiRej:        "Відмови",
+    kpiTrial:      "Активні випробування",
+    insightsTag:   "Причини відмов",
+    insightsTitle: "Чому ліди відмовили",
+    pipelineTag:   "Розбивка воронки",
+    geoTag:        "Географія",
+    tableTitle:    "Усі ліди — повна деталізація",
+    sortHint:      "Натисніть заголовок колонки для сортування",
+    colCompany:    "Компанія",
+    colCountry:    "Країна",
+    colStatus:     "Статус",
+    colNotes:      "Прогрес та нотатки",
+    filterAll:     "Усі",
+    filterCold:    "Холодні",
+    filterWarm:    "Теплі",
+    filterEval:    "Оцінка",
+    filterRej:     "Відмови",
+    filterTrial:   "Випробування",
+    footerLabel:   "Звіт по лідах 2026",
+    footerConf:    "Конфіденційно — лише для внутрішнього використання",
+    statusCold:    "Холодний лід",
+    statusWarm:    "Теплий лід",
+    statusEval:    "Оцінка пропозиції",
+    statusTrial:   "Випробування",
+    statusRej:     "Відмова",
+    pipelineCold:  "Холодний лід",
+    pipelineWarm:  "Теплий лід",
+    pipelineEval:  "Оцінка пропозиції",
+    pipelineRej:   "Відмова",
+    pipelineTrial: "Випробування",
+  }
 };
 
-let currentSort = { col: -1, dir: 1 };
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let currentLang   = 'en';
+let currentPeriod = 0;
 let currentFilter = 'all';
+let currentSort   = { col: -1, dir: 1 };
+
+/* ═══════════════════════════════════════════
+   PERIOD DROPDOWN
+═══════════════════════════════════════════ */
+function togglePeriodDropdown() {
+  document.getElementById('periodWrapper').classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#periodWrapper')) {
+    document.getElementById('periodWrapper').classList.remove('open');
+  }
+});
+
+function selectPeriod(idx, btn) {
+  currentPeriod = idx;
+  currentFilter = 'all';
+  currentSort   = { col: -1, dir: 1 };
+  document.querySelectorAll('.period-option').forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('periodWrapper').classList.remove('open');
+  render();
+}
+
+/* ═══════════════════════════════════════════
+   LANGUAGE
+═══════════════════════════════════════════ */
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase() === lang || (lang === 'uk' && b.textContent === 'UA'));
+  });
+  render();
+}
+
+/* ═══════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════ */
+function render() {
+  const t  = i18n[currentLang];
+  const p  = PERIODS[currentPeriod];
+  const leads = p.leads;
+
+  // — static text via data-i18n —
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key]) el.textContent = t[key];
+  });
+
+  // — header period / meta —
+  document.getElementById('reportTitle').textContent =
+    'Period: ' + (currentLang === 'en' ? p.label_en : p.label_uk);
+  document.getElementById('reportMeta').textContent =
+    currentLang === 'en' ? p.meta_en : p.meta_uk;
+  document.getElementById('footerDate').textContent =
+    currentLang === 'en' ? p.footer_en : p.footer_uk;
+
+  // — period dropdown option labels —
+  document.querySelectorAll('.period-option small').forEach((el, i) => {
+    const keys = ['q1q2', 'q2'];
+    el.textContent = t[keys[i]] || '';
+  });
+
+  // — counts —
+  const cold    = leads.filter(l => l.status === 'cold').length;
+  const warm    = leads.filter(l => l.status === 'warm').length;
+  const eval_   = leads.filter(l => l.status === 'eval').length;
+  const rej     = leads.filter(l => l.status === 'rejected').length;
+  const trial   = leads.filter(l => l.status === 'trial').length;
+  const comm    = cold + warm;
+  const total   = leads.length;
+
+  document.getElementById('kpi-total').textContent = total;
+  document.getElementById('kpi-comm').textContent  = comm;
+  document.getElementById('kpi-eval').textContent  = eval_;
+  document.getElementById('kpi-rej').textContent   = rej;
+  document.getElementById('kpi-trial').textContent = trial;
+
+  // — pipeline bars —
+  const maxCount = Math.max(cold, warm, eval_, rej, trial, 1);
+  const bars = [
+    { key: 'pipelineCold',  count: cold,  color: '#c8c8c8', textColor: '#555' },
+    { key: 'pipelineWarm',  count: warm,  color: 'var(--navy)', textColor: 'var(--navy)' },
+    { key: 'pipelineEval',  count: eval_, color: 'var(--black)', textColor: 'var(--black)' },
+    { key: 'pipelineRej',   count: rej,   color: '#f4a59a', textColor: '#c0392b' },
+    { key: 'pipelineTrial', count: trial, color: 'var(--red)', textColor: 'var(--red)' },
+  ];
+
+  document.getElementById('pipelineBars').innerHTML = bars.map(b => `
+    <div class="status-row">
+      <div class="status-name">${t[b.key]}</div>
+      <div class="status-bar-wrap">
+        <div class="status-bar-fill" style="width:${Math.round(b.count/maxCount*100)}%; background:${b.color};"></div>
+      </div>
+      <div class="status-count" style="color:${b.textColor};">${b.count}</div>
+    </div>`).join('');
+
+  // — geography —
+  document.getElementById('geoText').innerHTML =
+    currentLang === 'en' ? p.geo_en : p.geo_uk;
+
+  // — insights —
+  const insights = currentLang === 'en' ? p.insights_en : p.insights_uk;
+  document.getElementById('insightsList').innerHTML = insights.length
+    ? insights.map(ins => `<li><strong>${ins.name}</strong>${ins.text}</li>`).join('')
+    : `<li style="opacity:0.5">${currentLang === 'en' ? 'No rejections this period.' : 'Відмов за цей період не зафіксовано.'}</li>`;
+
+  // — filter bar —
+  const counts = { cold, warm, eval: eval_, rejected: rej, trial };
+  const filters = [
+    { key: 'all',      labelKey: 'filterAll',   count: total },
+    { key: 'cold',     labelKey: 'filterCold',  count: cold },
+    { key: 'warm',     labelKey: 'filterWarm',  count: warm },
+    { key: 'eval',     labelKey: 'filterEval',  count: eval_ },
+    { key: 'rejected', labelKey: 'filterRej',   count: rej },
+    { key: 'trial',    labelKey: 'filterTrial', count: trial },
+  ];
+
+  document.getElementById('filterBar').innerHTML =
+    `<span class="filter-label">${currentLang === 'en' ? 'Filter:' : 'Фільтр:'}</span>` +
+    filters.map(f => {
+      const isActive = currentFilter === f.key;
+      const cls = isActive ? (f.key === 'rejected' ? 'filter-btn active-red' : 'filter-btn active') : 'filter-btn';
+      return `<button class="${cls}" onclick="filterTable('${f.key}', this)">${t[f.labelKey]} (${f.count})</button>`;
+    }).join('');
+
+  // — table —
+  renderTable(getFilteredSorted());
+}
+
+function getFilteredSorted() {
+  const leads = PERIODS[currentPeriod].leads;
+  let data = currentFilter === 'all' ? [...leads] : leads.filter(l => l.status === currentFilter);
+
+  const keys = [null, 'name',
+    currentLang === 'en' ? 'country_en' : 'country_uk',
+    'status'];
+
+  if (currentSort.col > 0 && keys[currentSort.col]) {
+    const k = keys[currentSort.col];
+    data.sort((a, b) => (a[k] || '').localeCompare(b[k] || '') * currentSort.dir);
+  }
+  return data;
+}
 
 function renderTable(data) {
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = '';
-  data.forEach((lead, i) => {
-    const s = statusMap[lead.status] || { label: lead.status, cls: "badge-cold" };
-    const notes = lead.notes.replace(/\n/g, '<br>');
-    tbody.innerHTML += `
+  const t = i18n[currentLang];
+  const statusMap = {
+    cold:     { label: t.statusCold,  cls: 'badge-cold' },
+    warm:     { label: t.statusWarm,  cls: 'badge-warm' },
+    eval:     { label: t.statusEval,  cls: 'badge-eval' },
+    trial:    { label: t.statusTrial, cls: 'badge-trial' },
+    rejected: { label: t.statusRej,   cls: 'badge-rejected' },
+  };
+
+  document.getElementById('tableBody').innerHTML = data.map((lead, i) => {
+    const s     = statusMap[lead.status] || { label: lead.status, cls: 'badge-cold' };
+    const notes = (currentLang === 'en' ? lead.notes_en : lead.notes_uk).replace(/\n/g, '<br>');
+    const country = currentLang === 'en' ? lead.country_en : lead.country_uk;
+    return `
       <tr data-status="${lead.status}">
-        <td class="row-num">${i+1}</td>
+        <td class="row-num">${i + 1}</td>
         <td class="lead-name">${lead.name}</td>
-        <td class="country">${lead.country}</td>
+        <td class="country">${country}</td>
         <td><span class="badge ${s.cls}">${s.label}</span></td>
         <td class="notes">${notes}</td>
       </tr>`;
-  });
+  }).join('');
 }
 
 function filterTable(status, btn) {
   currentFilter = status;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active', 'active-red'));
-  btn.classList.add(status === 'Відмова' ? 'active-red' : 'active');
-
-  let filtered = status === 'all' ? leads : leads.filter(l => l.status === status);
-  renderTable(filtered);
+  btn.classList.add(status === 'rejected' ? 'active-red' : 'active');
+  renderTable(getFilteredSorted());
 }
 
 function sortTable(col) {
+  document.querySelectorAll('thead th').forEach((h, i) => {
+    h.classList.remove('sorted');
+    const arr = h.querySelector('.sort-arrow');
+    if (arr) arr.textContent = '↕';
+  });
   const headers = document.querySelectorAll('thead th');
-  headers.forEach(h => h.classList.remove('sorted'));
   headers[col].classList.add('sorted');
 
-  if (currentSort.col === col) {
-    currentSort.dir *= -1;
-  } else {
-    currentSort.col = col;
-    currentSort.dir = 1;
-  }
+  currentSort.dir = currentSort.col === col ? currentSort.dir * -1 : 1;
+  currentSort.col = col;
 
-  const keys = [null, 'name', 'country', 'status'];
-  let data = currentFilter === 'all' ? [...leads] : leads.filter(l => l.status === currentFilter);
-
-  if (col > 0 && keys[col]) {
-    data.sort((a, b) => a[keys[col]].localeCompare(b[keys[col]]) * currentSort.dir);
-  }
-
-  // Update arrow
   const arrow = headers[col].querySelector('.sort-arrow');
-  arrow.textContent = currentSort.dir === 1 ? '↑' : '↓';
+  if (arrow) arrow.textContent = currentSort.dir === 1 ? '↑' : '↓';
 
-  renderTable(data);
+  renderTable(getFilteredSorted());
 }
 
-// Initial render
-renderTable(leads);
+// boot
+render();
 </script>
 </body>
 </html>
